@@ -1,6 +1,10 @@
 #include <windows.h>
 #include <iostream>
 #include <unordered_map>
+
+#pragma comment(lib, "user32.lib")
+#pragma comment(lib, "kernel32.lib")
+#pragma comment(lib, "ntdll.lib")
 HHOOK hMouseHook;
 POINT MousePos;
 CURSORINFO CursorInfo{ };
@@ -70,10 +74,7 @@ bool IsHookStillValid() {
 	if (!IsHookInstalled) return false;
     __try {
         if (!CallNextHookEx(hMouseHook, 0, 0, 0)) {
-            DWORD err = GetLastError();
-            if (err != ERROR_SUCCESS) {
-                return false;
-            }
+          
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -137,6 +138,7 @@ int main()
         NULL,
         THREAD_CREATE_FLAGS_BYPASS_PROCESS_FREEZE,
         0, 0, 0, NULL);
+
     while (true)
     {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
